@@ -1,5 +1,6 @@
 package com.example.trabajandocondb
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -16,10 +17,7 @@ class MainActivity : AppCompatActivity() {
         app = applicationContext as PersonApp
 
         System.currentTimeMillis() //saca un Long con la fecha actual en milisegundos. Ideal para ponerle como nombre unico
-
-        
-
-    }
+  }
 
     fun inserta(view: View){
         lifecycleScope.launch{
@@ -35,6 +33,11 @@ class MainActivity : AppCompatActivity() {
                 Log.d("miapp","Nombre " + todo[i].id + " " + todo[i].name + " " + todo[i].age )
         }
        }
+    }
+
+    fun verLista(view:View){
+        val elMensajero: Intent = Intent(this,lista_personas::class.java)
+        startActivity(elMensajero)
     }
 
 }
