@@ -3,14 +3,17 @@
     package="com.example.trabajandocondb">
 
     <application
-        android:name=".PersonApp"
+        android:name=".Global"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TrabajandoConDB">
-        <activity android:name=".lista_personas"></activity>
+        <activity android:name=".ficha_persona"></activity>
+        <activity android:name=".form_editar_persona" />
+        <activity android:name=".form_nueva_persona" />
+        <activity android:name=".lista_personas" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,74 +1,74 @@
 package com.example.trabajandocondb
 
 import android.content.Context
+import android.content.Intent
+import android.graphics.BitmapFactory
+import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
+import java.io.File
 
 class lista_personas : AppCompatActivity() {
     lateinit var miPersona_Recycler: RecyclerView
-    lateinit var app:PersonApp
+    lateinit var app:Global
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.lista_personas)
-        app = applicationContext as PersonApp
+        app = applicationContext as Global
         miPersona_Recycler = findViewById(R.id.recycler_vista)
 
         miPersona_Recycler.layoutManager = LinearLayoutManager(this)
 
+        //lanzamos la lista como corrutina para que acceda a la base de datos a su ritmo sin estresar al activity
         lifecycleScope.launch(){
-            var todo:List<Person> = app.room.personDao().getAll()
-            cargarLista(todo)
-
+            var laLista:List<Person> = app.room.personDao().getAll() //esto trae todos los registros
+            miPersona_Recycler.adapter = elAdaptador(laLista,applicationContext) //al adaptador le ponemos applicationcontext pq dentro de la clase no es visible la variable THIS
         }
 
     }
 
-    fun cargarLista(todo:List<Person>){
-        miPersona_Recycler.adapter = elAdaptador(todo,this)
-    }
 
     class elAdaptador(var personas:List<Person>,var context:Context):RecyclerView.Adapter<elViewHolder>(){
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): elViewHolder {
-            return elViewHolder(LayoutInflater.from(context).inflate(R.layout.lista_personas_fila,parent,false))
+            return elViewHolder(LayoutInflater.from(context).inflate(R.layout.fila_listado,parent,false))
         }
 
         override fun onBindViewHolder(holder: elViewHolder, position: Int) {
-
             val miPersona = personas[position]
             holder.enlazar(miPersona,context)
+            //hacemos que la fila sea pulsable y le asignamos el intent que abre la ficha de la persona
             holder.itemView.setOnClickListener {
-                // TODO: 19-Nov-20 Hacer intent para que habra la ficha de person
-                Toast.makeText(context,"Me hicieron Click " + personas[position].id,Toast.LENGTH_LONG).show()
+                val miMensajero: Intent = Intent(context,ficha_persona::class.java)
+                miMensajero.putExtra("idPersona",miPersona.id.toString())
+                miMensajero.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK) //esto es necesario para abrir activities fuera del contexto
+                context.startActivity(miMensajero)
             }
         }
 
-        override fun getItemCount(): Int {
-            return personas.size
-        }
-
+        override fun getItemCount(): Int = personas.size
     }
 
     class elViewHolder(view: View):RecyclerView.ViewHolder(view){
-        val elId: TextView = view.findViewById(R.id.id)
-        val elNombre: TextView = view.findViewById(R.id.nombre)
-        val laEdad: TextView = view.findViewById(R.id.edad)
+        val laFoto:ImageView = view.findViewById(R.id.imageView_fila)
+        val nombre:TextView = view.findViewById(R.id.nombre_fila)
+        val apellidos:TextView = view.findViewById(R.id.apellidos_fila)
 
         fun enlazar(laPersona:Person,context:Context){
-            elId.text = laPersona.id.toString()
-            elNombre.text = laPersona.name.toString()
-            laEdad.text = laPersona.age.toString()
+            nombre.text = laPersona.nombre
+            apellidos.text = laPersona.apellidos
+            laFoto.setImageBitmap(BitmapFactory.decodeFile("data/data/com.example.trabajandocondb/app_fotosUsuarioss/"+laPersona.id.toString()+".jpg"))
         }
     }
 }

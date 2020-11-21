@@ -5,11 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-class PersonApp:Application() {
+class Global:Application() {
         lateinit var room:PeopleDB
     override fun onCreate() {
         super.onCreate()
-           room = Room.databaseBuilder(this, PeopleDB::class.java, "miDB").build()
+           room = Room.databaseBuilder(this, PeopleDB::class.java, "bbddPersonas").build()
        }
 
 }
