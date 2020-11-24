@@ -9,6 +9,7 @@ import android.provider.MediaStore
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import java.io.File
@@ -63,6 +64,8 @@ class form_nueva_persona : AppCompatActivity() {
             foto_bitMap.compress(Bitmap.CompressFormat.JPEG,100,elFlujoDeDatos)
             elFlujoDeDatos.flush()
             elFlujoDeDatos.close()
+            Toast.makeText(applicationContext,"Creado",Toast.LENGTH_LONG).show()
+            nombre_vista.visibility = View.INVISIBLE
         } //fin de la coroutine
     }
 

@@ -10,6 +10,8 @@ class Global:Application() {
     override fun onCreate() {
         super.onCreate()
            room = Room.databaseBuilder(this, PeopleDB::class.java, "bbddPersonas").build()
+
        }
+
 
 }

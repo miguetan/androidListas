@@ -1,16 +1,14 @@
 package com.example.trabajandocondb
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 
@@ -54,25 +52,25 @@ class ficha_persona : AppCompatActivity() {
         direccion_vista.text = miPersona.direccion + " " + miPersona.poblacion
         tlf_vista.text = miPersona.tlf
         web_vista.text = miPersona.web
-        foto_vista.setImageBitmap(BitmapFactory.decodeFile("data/data/com.example.trabajandocondb/app_fotosUsuarioss/"+miPersona.id+".jpg"))
+        foto_vista.setImageBitmap(BitmapFactory.decodeFile("data/data/com.example.trabajandocondb/app_fotosUsuarioss/" + miPersona.id + ".jpg"))
 
         //Programamos los eventos de pulsar en las vistas (botones, llamar por tlf, abrir web, etc
         tlf_vista.setOnClickListener {
-            val elMensaje: Uri = Uri.parse("tel:"+miPersona.tlf)
-            val elMensajero = Intent(Intent.ACTION_DIAL,elMensaje)
+            val elMensaje: Uri = Uri.parse("tel:" + miPersona.tlf)
+            val elMensajero = Intent(Intent.ACTION_DIAL, elMensaje)
             startActivity(elMensajero)
         }
 
         web_vista.setOnClickListener {
-            val elMensaje: Uri = Uri.parse("http:"+miPersona.web)
-            val elMensajero = Intent(Intent.ACTION_VIEW,elMensaje)
+            val elMensaje: Uri = Uri.parse("http:" + miPersona.web)
+            val elMensajero = Intent(Intent.ACTION_VIEW, elMensaje)
             startActivity(elMensajero)
         }
 
         direccion_vista.setOnClickListener {
-            val elMensaje: Uri = Uri.parse("google.navigator:q="+miPersona.direccion + ", " + miPersona.poblacion)
-            val elMensajero = Intent(Intent.ACTION_VIEW,elMensaje)
-            startActivity(elMensajero)
+            val uri = "https://www.google.com/maps/dir/?api=1&destination="+miPersona.direccion + ", " + miPersona.poblacion+"&dir_action=navigate"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+            startActivity(intent)
         }
     }
 
@@ -83,7 +81,7 @@ class ficha_persona : AppCompatActivity() {
     fun borrarPersona(view: View){
         lifecycleScope.launch(){
             app.room.personDao().borrar(miPersona)
-            val miMensaje = Intent(applicationContext,lista_personas::class.java)
+            val miMensaje = Intent(applicationContext, lista_personas::class.java)
             startActivity(miMensaje)
         }
     }
@@ -92,9 +90,9 @@ class ficha_persona : AppCompatActivity() {
     * este boton solo lanza la ventana modificar datos
     * debemos pasarle el id del usuario a modificar
     * */
-    fun modificarDatos(view:View){
-        val miMensaje = Intent(this,form_editar_persona::class.java)
-        miMensaje.putExtra("idPersona",idPersona.toString())
+    fun modificarDatos(view: View){
+        val miMensaje = Intent(this, form_editar_persona::class.java)
+        miMensaje.putExtra("idPersona", idPersona.toString())
         startActivity(miMensaje)
     }
 }

@@ -44,6 +44,7 @@ class form_editar_persona : AppCompatActivity() {
         poblacion_vista = findViewById(R.id.editTextPoblacion)
         tlf_vista = findViewById(R.id.editTextTelefono)
         web_vista = findViewById(R.id.editTextWeb)
+
         foto_vista = findViewById(R.id.imageView_formulario_insert)
 
         lifecycleScope.launch {
